@@ -2,7 +2,7 @@
 
 ## Pemetaan Requirement -> Implementasi
 
-| Requirement Anda            | Dipakai di                                                                 |
+| Requirement            | Dipakai di                                                                 |
 |------------------------------|-----------------------------------------------------------------------------|
 | **Node.js**                  | `backend/server.js` — server Express, dijalankan dengan `node`/`npm start` |
 | **DevExtreme**                | Sudah di-install & di-import di `frontend/src/index.js` (`dx.light.css`). Belum dipakai di halaman login (login cukup form sederhana), tapi siap dipakai untuk **DataGrid** di module Master/Transaksi/Report nanti |
