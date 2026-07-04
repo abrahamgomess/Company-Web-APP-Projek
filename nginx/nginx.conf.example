@@ -1,0 +1,36 @@
+# nginx.conf.example
+# Taruh isi ini di dalam blok http { ... } pada nginx.conf Anda,
+# atau di sites-available/company-web (lalu symlink ke sites-enabled).
+#
+# Alurnya:
+# Browser -> nginx (port 80) -> React build (static) untuk halaman
+#                            -> /api/* diteruskan (proxy) ke Node.js microservice (port 5000)
+
+server {
+    listen 80;
+    server_name localhost;
+
+    # 1. Serve React build (hasil `npm run build` di folder frontend)
+    root   C:/project/login-app/frontend/build;  # sesuaikan path Windows/Linux Anda
+    index  index.html;
+
+    location / {
+        try_files $uri /index.html;
+    }
+
+    # 2. Reverse proxy semua request /api ke Node.js microservice (auth-service)
+    location /api/ {
+        proxy_pass         http://localhost:5000/api/;
+        proxy_http_version 1.1;
+        proxy_set_header   Upgrade $http_upgrade;
+        proxy_set_header   Connection 'upgrade';
+        proxy_set_header   Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    # Catatan: kalau nanti module master/transaksi/report jadi microservice
+    # terpisah (port 5001, 5002, dst), tinggal tambah location block serupa:
+    # location /api/master/   { proxy_pass http://localhost:5001/; }
+    # location /api/transaksi/{ proxy_pass http://localhost:5002/; }
+    # location /api/report/   { proxy_pass http://localhost:5003/; }
+}
